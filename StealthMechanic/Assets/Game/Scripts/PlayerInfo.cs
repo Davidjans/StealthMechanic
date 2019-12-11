@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerInfo : MonoBehaviour
 {
-    [SerializeField] private CostumeState m_CostumeState;
+    [SerializeField] public CostumeState m_CostumeState;
     [SerializeField] private SkinnedMeshRenderer m_MeshRenderer;
 
     public void Update()
@@ -36,6 +36,23 @@ public class PlayerInfo : MonoBehaviour
             {
                 m_MeshRenderer.materials[i].color = Color.black;
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            ChangeCostumeState(0);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            ChangeCostumeState(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            ChangeCostumeState(2);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            ChangeCostumeState(3);
         }
     }
 

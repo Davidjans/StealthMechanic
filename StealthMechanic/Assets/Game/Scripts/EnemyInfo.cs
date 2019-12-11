@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyInfo : MonoBehaviour
 {
-    [SerializeField] private CostumeState m_CostumeState;
+    public CostumeState m_CostumeState;
     [SerializeField] private SkinnedMeshRenderer m_MeshRenderer;
 
     void Start()
@@ -50,3 +50,4 @@ public class EnemyInfo : MonoBehaviour
         m_CostumeState = costumeState;
     }
 }
+
