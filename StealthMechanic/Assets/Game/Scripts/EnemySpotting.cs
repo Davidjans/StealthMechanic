@@ -13,9 +13,10 @@ public class EnemySpotting : MonoBehaviour
     [SerializeField] private TextMeshProUGUI m_TimerText;
     public EnemyState m_EnemyState;
 
-    private float m_CurrentGuaranteedAngerTimer;
+    private float m_CurrentGuaranteedAngerTimer = 20;
+    private float m_NotSeenPlayer = 0;
     private Ray m_Sight;
-    private bool m_AggresiveToPlayer;
+    [HideInInspector] public bool m_AggresiveToPlayer;
     private bool m_SeenLastFrame;
     private CostumeState m_LastFrameCostume;
     // Update is called once per frame
@@ -32,6 +33,7 @@ public class EnemySpotting : MonoBehaviour
 
             if (rayHit.collider.tag == "Player")
             {
+                m_NotSeenPlayer = 0;
                 m_SeenLastFrame = true;
                 Debug.Log("HitPlayer");
                 if(m_CurrentGuaranteedAngerTimer > 0)
@@ -46,7 +48,7 @@ public class EnemySpotting : MonoBehaviour
                     {
                         m_CurrentGuaranteedAngerTimer = m_OriginalGuaranteedAngerTimer;
                     }
-                    if (m_PlayerInfo.m_CostumeState != m_EnemyInfo.m_CostumeState && m_CurrentGuaranteedAngerTimer > 0)
+                    if (m_PlayerInfo.m_CostumeState != m_EnemyInfo.m_CostumeState || m_CurrentGuaranteedAngerTimer > 0)
                     {
                         m_AggresiveToPlayer = true;
                         m_EnemyState = EnemyState.Aggresive;
@@ -62,13 +64,16 @@ public class EnemySpotting : MonoBehaviour
             }
             else
             {
+                m_NotSeenPlayer += Time.deltaTime;
                 m_SeenLastFrame = false;
             }
         }
         else
         {
             m_SeenLastFrame = false;
+            m_NotSeenPlayer += Time.deltaTime;
         }
+
         if (m_CurrentGuaranteedAngerTimer > 0)
         {
             m_CurrentGuaranteedAngerTimer -= Time.deltaTime;
@@ -77,6 +82,11 @@ public class EnemySpotting : MonoBehaviour
         else
         {
             m_CurrentGuaranteedAngerTimer = 0;
+            if(m_NotSeenPlayer > 20)
+            {
+                m_EnemyState = EnemyState.Neutral;
+                m_Animator.SetInteger("EnemyState", 1);
+            }
         }
         //m_TimerText.text = m_CurrentGuaranteedAngerTimer.ToString();
         m_TimerText.text = m_EnemyState.ToString() + m_CurrentGuaranteedAngerTimer.ToString();
