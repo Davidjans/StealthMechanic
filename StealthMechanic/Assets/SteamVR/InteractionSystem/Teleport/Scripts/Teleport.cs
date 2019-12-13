@@ -11,7 +11,6 @@ using System.Collections.Generic;
 
 namespace Valve.VR.InteractionSystem
 {
-	//-------------------------------------------------------------------------
 	public class Teleport : MonoBehaviour
     {
         [SerializeField] private List<Rigidbody> m_Rigidbodies;

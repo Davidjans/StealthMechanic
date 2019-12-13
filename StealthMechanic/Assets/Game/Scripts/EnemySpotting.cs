@@ -11,28 +11,36 @@ public class EnemySpotting : MonoBehaviour
     [SerializeField] private Animator m_Animator;
     [SerializeField] private float m_OriginalGuaranteedAngerTimer = 20;
     [SerializeField] private TextMeshProUGUI m_TimerText;
+    [SerializeField] private float yoffset;
     public EnemyState m_EnemyState;
 
-    private float m_CurrentGuaranteedAngerTimer = 20;
+    private float m_CurrentGuaranteedAngerTimer;
     private float m_NotSeenPlayer = 0;
     private Ray m_Sight;
     [HideInInspector] public bool m_AggresiveToPlayer;
     private bool m_SeenLastFrame;
     private CostumeState m_LastFrameCostume;
-    // Update is called once per frame
+
+    private void Start()
+    {
+        m_LastFrameCostume = m_PlayerInfo.m_CostumeState;
+    }
+
     void Update()
     {
         m_Sight.origin = new Vector3(transform.position.x,transform.position.y + 0.5f, transform.position.z);
-        m_Sight.direction = m_PlayerInfo.transform.position - transform.position;
+        Vector3 playerPosition = new Vector3(m_PlayerInfo.transform.position.x, m_PlayerInfo.transform.position.y - yoffset, m_PlayerInfo.transform.position.x);
+        m_Sight.direction = playerPosition - transform.position;
         RaycastHit rayHit;
         Vector3 fwd = transform.TransformDirection(Vector3.forward);
 
-        if (Physics.Raycast(m_Sight, out rayHit, m_ChaseRange))
+        if (Physics.Raycast(m_Sight, out rayHit, m_ChaseRange, 1 << 8 | 1 << 10))
         {
-            Debug.DrawLine(m_Sight.origin, rayHit.point,Color.red);
+            
 
-            if (rayHit.collider.tag == "Player")
+            if (rayHit.collider.gameObject.layer == 8)
             {
+                Debug.DrawLine(m_Sight.origin, rayHit.point, Color.green);
                 m_NotSeenPlayer = 0;
                 m_SeenLastFrame = true;
                 Debug.Log("HitPlayer");
@@ -64,8 +72,10 @@ public class EnemySpotting : MonoBehaviour
             }
             else
             {
+                Debug.DrawLine(m_Sight.origin, rayHit.point, Color.red);
                 m_NotSeenPlayer += Time.deltaTime;
                 m_SeenLastFrame = false;
+
             }
         }
         else
