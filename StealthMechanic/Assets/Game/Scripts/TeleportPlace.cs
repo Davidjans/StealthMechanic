@@ -19,7 +19,7 @@ public class TeleportPlace : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_EnemySpotting.m_AggresiveToPlayer)
+        if (m_EnemySpotting.m_EnemyState != EnemyState.Friendly)
         {
             m_TeleportArea.locked = true;
         }

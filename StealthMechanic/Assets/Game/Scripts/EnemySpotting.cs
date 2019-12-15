@@ -5,8 +5,8 @@ using UnityEngine;
 using TMPro;
 public class EnemySpotting : MonoBehaviour
 {
-    [SerializeField] private EnemyInfo m_EnemyInfo;
-    [SerializeField] private PlayerInfo m_PlayerInfo;
+    [SerializeField] public EnemyInfo m_EnemyInfo;
+    [SerializeField] public PlayerInfo m_PlayerInfo;
     [SerializeField] private float m_ChaseRange;
     [SerializeField] private Animator m_Animator;
     [SerializeField] private float m_OriginalGuaranteedAngerTimer = 20;
