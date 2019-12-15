@@ -23,21 +23,24 @@ public class EnemySpotting : MonoBehaviour
 
     private void Start()
     {
+        if (m_PlayerInfo == null)
+        {
+            m_PlayerInfo = GameObject.Find("Spine1").GetComponent<PlayerInfo>();
+        }
         m_LastFrameCostume = m_PlayerInfo.m_CostumeState;
+        
     }
 
     void Update()
     {
         m_Sight.origin = new Vector3(transform.position.x,transform.position.y + 0.5f, transform.position.z);
         Vector3 playerPosition = new Vector3(m_PlayerInfo.transform.position.x, m_PlayerInfo.transform.position.y - yoffset, m_PlayerInfo.transform.position.x);
-        m_Sight.direction = playerPosition - transform.position;
+        m_Sight.direction = m_PlayerInfo.transform.position - transform.position;
         RaycastHit rayHit;
         Vector3 fwd = transform.TransformDirection(Vector3.forward);
 
         if (Physics.Raycast(m_Sight, out rayHit, m_ChaseRange, 1 << 8 | 1 << 10))
         {
-            
-
             if (rayHit.collider.gameObject.layer == 8)
             {
                 Debug.DrawLine(m_Sight.origin, rayHit.point, Color.green);
